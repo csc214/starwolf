@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.text.Font?>
+
+<VBox prefHeight="700.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1">
+  <MenuBar VBox.vgrow="NEVER">
+    <Menu mnemonicParsing="false" text="File">
+      <MenuItem mnemonicParsing="false" text="New" />
+      <MenuItem mnemonicParsing="false" text="Open" />
+      <SeparatorMenuItem mnemonicParsing="false" />
+      <MenuItem mnemonicParsing="false" text="Close" />
+      <MenuItem mnemonicParsing="false" text="Save" />
+      <MenuItem mnemonicParsing="false" text="Save As" />
+      <SeparatorMenuItem mnemonicParsing="false" />
+      <MenuItem mnemonicParsing="false" text="Preferences" />
+      <SeparatorMenuItem mnemonicParsing="false" />
+      <MenuItem mnemonicParsing="false" text="Quit" />
+    </Menu>
+    <Menu mnemonicParsing="false" text="Edit">
+      <MenuItem mnemonicParsing="false" text="Undo" />
+      <MenuItem mnemonicParsing="false" text="Redo" />
+      <SeparatorMenuItem mnemonicParsing="false" />
+      <MenuItem mnemonicParsing="false" text="Cut" />
+      <MenuItem mnemonicParsing="false" text="Copy" />
+      <MenuItem mnemonicParsing="false" text="Paste" />
+      <MenuItem mnemonicParsing="false" text="Delete" />
+      <SeparatorMenuItem mnemonicParsing="false" />
+      <MenuItem mnemonicParsing="false" text="Select All" />
+      <MenuItem mnemonicParsing="false" text="UnSelect All" />
+    </Menu>
+    <Menu mnemonicParsing="false" text="Help">
+      <MenuItem mnemonicParsing="false" text="About" />
+    </Menu>
+  </MenuBar>
+  <SplitPane dividerPositions="0.35" focusTraversable="true" VBox.vgrow="ALWAYS">
+    <ScrollPane fitToWidth="true" minWidth="350.0" SplitPane.resizableWithParent="false">
+      <VBox id="VBox" alignment="TOP_CENTER" spacing="5.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+          <TitledPane animated="false" text="Configure">
+                     <VBox>
+                           <Label text="Connect To Device" />
+                           <HBox alignment="CENTER">
+                                 <ChoiceBox prefWidth="250.0">
+                                    <HBox.margin>
+                                       <Insets bottom="10.0" top="10.0" />
+                                    </HBox.margin>
+                                 </ChoiceBox>
+                           </HBox>
+                           <HBox alignment="TOP_RIGHT">
+                                  <Button mnemonicParsing="false" text="Connect" />
+                                  <Button mnemonicParsing="false" text="Fetch Meta" />
+                           </HBox>
+                           <GridPane>
+                             <columnConstraints>
+                               <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                               <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="30.0" />
+                               <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                             </columnConstraints>
+                             <rowConstraints>
+                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                             </rowConstraints>
+                                 <Label text="Dimensions" />
+                                 <Label text="  XOFS" GridPane.rowIndex="1" />
+                                 <Label text="  YOFS" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                                 <Label text="  XSize" GridPane.rowIndex="3" />
+                                 <Label text="  YSize" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                                 <TextField GridPane.rowIndex="2" />
+                                 <TextField GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                                 <TextField GridPane.rowIndex="4" />
+                                 <TextField GridPane.columnIndex="2" GridPane.rowIndex="4" />
+                                 <Button mnemonicParsing="false" text="Set" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+                                 <Label text="Exposure" GridPane.rowIndex="6" />
+                                 <Label text="  Seconds" GridPane.rowIndex="7" />
+                                 <Label text="  Milliseconds" GridPane.columnIndex="2" GridPane.rowIndex="7" />
+                                 <TextField GridPane.rowIndex="8" />
+                                 <TextField GridPane.columnIndex="2" GridPane.rowIndex="8" />
+                                 <Button mnemonicParsing="false" text="Set" GridPane.columnIndex="2" GridPane.rowIndex="9" />
+                         </GridPane>
+                     </VBox>
+          </TitledPane>
+          <TitledPane animated="false" text="Capture">
+
+                     <GridPane>
+                       <columnConstraints>
+                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                       </columnConstraints>
+                       <rowConstraints>
+                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                       </rowConstraints>
+
+                           <ChoiceBox prefWidth="150.0" GridPane.columnIndex="1" value="Full" />
+
+                     </GridPane>
+          </TitledPane>
+          <TitledPane animated="false" expanded="false" text="Export">
+
+              <AnchorPane id="Content" minHeight="0.0" prefHeight="200.0" />
+          </TitledPane>
+          <TitledPane animated="false" expanded="false" text="Render">
+
+              <AnchorPane id="Content" minHeight="0.0" prefHeight="200.0" />
+
+          </TitledPane>
+
+      </VBox>
+    </ScrollPane>
+    <AnchorPane id="Content">
+      <Canvas fx:id="mainCanvas" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+    </AnchorPane>
+  </SplitPane>
+  <HBox id="HBox" alignment="CENTER_LEFT" spacing="5.0" VBox.vgrow="NEVER">
+    <Label maxHeight="2.0" text="Status" HBox.hgrow="ALWAYS">
+      <font>
+        <Font fx:id="statFont" size="11.0" />
+      </font>
+      <textFill>
+        <Color fx:id="statFill" blue="0.625" green="0.625" red="0.625" />
+      </textFill>
+    </Label>
+    <Pane HBox.hgrow="ALWAYS" />
+    <Label font="$statFont" text="Right Status" textFill="$statFill" HBox.hgrow="NEVER" />
+    <padding>
+      <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
+    </padding>
+  </HBox>
+</VBox>
