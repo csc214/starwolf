@@ -9,8 +9,11 @@ import javafx.stage.Stage;
 public class Main extends Application {
 
     @Override
-    public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("view.fxml"));
+    public void start(Stage primaryStage) throws Exception {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("view.fxml"));
+        Parent root = (Parent) loader.load();
+        Controller controller = loader.getController();
+        controller.setMainStage(primaryStage);
         primaryStage.setTitle("Starwolf");
         primaryStage.setScene(new Scene(root, 1000, 700));
         primaryStage.show();
