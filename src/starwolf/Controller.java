@@ -1,11 +1,15 @@
 package starwolf;
 
 import javafx.application.Platform;
+import javafx.beans.binding.DoubleBinding;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.image.Image;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
@@ -22,20 +26,33 @@ public class Controller {
     @FXML
     private URL location;
     @FXML
-    private Canvas mainCanvas;
+    private Canvas canvas;
     @FXML
-    private Font statFont;
+    private Font font;
     @FXML
-    private Color statFill;
-    private Stage mainStage;
+    private Color color;
+    @FXML
+    private Scene root;
+    @FXML
+    private BorderPane base;
+    @FXML
+    private VBox optionsVBox;
 
-    protected void setMainStage(Stage stage) {
-        mainStage = stage;
+    private Stage stage;
+
+    protected void setStage(Stage st) {
+        this.stage = st;
+        stage.setMaximized(true);
+
+        DoubleBinding heightBinding = base.heightProperty().subtract(base.bottomProperty().getValue().getBoundsInLocal().getHeight());
+        DoubleBinding widthBinging = base.widthProperty().subtract(optionsVBox.widthProperty());
+        canvas.widthProperty().bind(widthBinging);
+        canvas.heightProperty().bind(heightBinding);
     }
 
     @FXML
     protected void initialize() {
-        assert mainCanvas != null : "fx:id=\"mainCanvas\" was not injected: check your FXML file 'view.fxml'.";
+        System.out.println("initialized");
     }
 
     @FXML
@@ -56,7 +73,7 @@ public class Controller {
                 new FileChooser.ExtensionFilter("GIF", "*.gif"),
                 new FileChooser.ExtensionFilter("FITS", "*.fits", "*.fit", "*.fts")
         );
-        File file = fileChooser.showOpenDialog(mainStage);
+        File file = fileChooser.showOpenDialog(stage);
         openFile(file);
     }
 
@@ -64,16 +81,9 @@ public class Controller {
         Task t = new Task() {
             @Override
             protected Object call() throws Exception {
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        System.out.println(file.getAbsoluteFile());
-                        System.out.println(mainCanvas.getWidth());
-                        System.out.println(mainCanvas.getHeight());
-                        mainCanvas.getGraphicsContext2D().clearRect(0, 0, mainCanvas.getWidth(), mainCanvas.getHeight());
-                        mainCanvas.getGraphicsContext2D().drawImage(new Image("file:" + file.getAbsolutePath()), 0, 0);
-                    }
-                });
+                Image tmp = new Image("file:" + file.getAbsolutePath(), canvas.getWidth(), canvas.getHeight(), true, true);
+                canvas.getGraphicsContext2D().clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+                canvas.getGraphicsContext2D().drawImage(tmp, 0, 0);
                 return null;
             }
         };
