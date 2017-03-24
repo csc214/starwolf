@@ -23,7 +23,7 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="700.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1">
+<VBox fx:id="mainStage" prefHeight="700.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="starwolf.Controller">
   <MenuBar VBox.vgrow="NEVER">
     <Menu mnemonicParsing="false" text="File">
       <MenuItem mnemonicParsing="false" text="New" />
@@ -107,6 +107,14 @@
                          </GridPane>
                      </VBox>
           </TitledPane>
+            <TitledPane animated="false" text="Open">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <Button fx:id="openButton" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" text="Open" />
+                     </children></AnchorPane>
+              </content>
+            </TitledPane>
           <TitledPane animated="false" text="Capture">
 
                      <GridPane>
@@ -122,7 +130,7 @@
                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                        </rowConstraints>
 
-                           <ChoiceBox prefWidth="150.0" GridPane.columnIndex="1" value="Full" />
+                           <ChoiceBox prefWidth="150.0" value="Full" GridPane.columnIndex="1" />
 
                      </GridPane>
           </TitledPane>
@@ -139,7 +147,9 @@
       </VBox>
     </ScrollPane>
     <AnchorPane id="Content">
-      <Canvas fx:id="mainCanvas" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+         <children>
+            <Canvas fx:id="mainCanvas" height="653.0" layoutY="-1.0" width="642.0" />
+         </children>
     </AnchorPane>
   </SplitPane>
   <HBox id="HBox" alignment="CENTER_LEFT" spacing="5.0" VBox.vgrow="NEVER">
