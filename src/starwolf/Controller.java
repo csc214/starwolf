@@ -1,54 +1,25 @@
 package starwolf;
 
 import javafx.application.Platform;
-import javafx.beans.binding.DoubleBinding;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 
 import java.io.File;
-import java.net.URL;
-import java.util.ResourceBundle;
 
 
 public class Controller {
     @FXML
-    private ResourceBundle resources;
-    @FXML
-    private URL location;
-    @FXML
     private Canvas canvas;
     @FXML
-    private Font font;
+    private VBox root;
     @FXML
-    private Color color;
-    @FXML
-    private Scene root;
-    @FXML
-    private BorderPane base;
-    @FXML
-    private VBox optionsVBox;
-
-    private Stage stage;
-
-    protected void setStage(Stage st) {
-        this.stage = st;
-        stage.setMaximized(true);
-
-        DoubleBinding heightBinding = base.heightProperty().subtract(base.bottomProperty().getValue().getBoundsInLocal().getHeight());
-        DoubleBinding widthBinging = base.widthProperty().subtract(optionsVBox.widthProperty());
-        canvas.widthProperty().bind(widthBinging);
-        canvas.heightProperty().bind(heightBinding);
-    }
+    private TextField terminal;
 
     @FXML
     protected void initialize() {
@@ -73,7 +44,7 @@ public class Controller {
                 new FileChooser.ExtensionFilter("GIF", "*.gif"),
                 new FileChooser.ExtensionFilter("FITS", "*.fits", "*.fit", "*.fts")
         );
-        File file = fileChooser.showOpenDialog(stage);
+        File file = fileChooser.showOpenDialog(null);
         openFile(file);
     }
 
@@ -88,5 +59,10 @@ public class Controller {
             }
         };
         new Thread(t).start();
+    }
+
+    @FXML
+    private void terminalAction(ActionEvent event) {
+        System.out.println(terminal.getCharacters());
     }
 }
