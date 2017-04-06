@@ -5,6 +5,7 @@ import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.VBox;
@@ -14,15 +15,30 @@ import java.io.File;
 
 
 public class Controller {
+    private Connector serialLink;
+
     @FXML
     private Canvas canvas;
     @FXML
     private VBox root;
     @FXML
     private TextField terminal;
+    @FXML
+    private TextArea termOut;
 
     @FXML
     protected void initialize() {
+        System.out.println("initialize");
+        serialLink = new Connector();
+        serialLink.initialize(termOut);
+        Thread t=new Thread() {
+            public void run() {
+                //the following line will keep this app alive for 1000 seconds,
+                //waiting for events to occur and responding to them (printing incoming messages to console).
+                try {Thread.sleep(1000000);} catch (InterruptedException ie) {}
+            }
+        };
+        t.start();
         System.out.println("initialized");
     }
 
@@ -63,6 +79,16 @@ public class Controller {
 
     @FXML
     private void terminalAction(ActionEvent event) {
-        System.out.println(terminal.getCharacters());
+        String temp = terminal.getText();
+        serialLink.write(temp);
+        termOut.appendText(temp + "\n");
+        terminal.clear();
     }
+
+    @FXML
+    public void terminalOut(String temp){
+        termOut.appendText(temp + "\n");
+        System.out.println(temp);
+    }
+
 }

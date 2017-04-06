@@ -19,7 +19,7 @@
                 <panes>
                     <TitledPane text="Terminal">
                         <VBox>
-                            <TextArea/>
+                            <TextArea fx:id="termOut" />
                             <TextField fx:id="terminal" onAction="#terminalAction"/>
                         </VBox>
                     </TitledPane>
