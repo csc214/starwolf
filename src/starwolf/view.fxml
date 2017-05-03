@@ -3,14 +3,19 @@
 <?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import starwolf.SWCanvas?>
 <VBox fx:id="root"
       fx:controller="starwolf.Controller"
       xmlns:fx="http://javafx.com/fxml">
     <MenuBar fx:id="menuBar">
         <Menu text="File">
-            <MenuItem text="Open" onAction="#menuActionOpen"/>
+            <MenuItem text="Open" onAction="#menuActionFileOpen"/>
+            <MenuItem text="Save" onAction="#menuActionFileSave"/>
             <SeparatorMenuItem/>
-            <MenuItem text="Quit" onAction="#quit"/>
+            <MenuItem text="Quit" onAction="#menuActionFileQuit"/>
+        </Menu>
+        <Menu text="Image">
+            <MenuItem text="FFT" onAction="#menuActionImageFFT"/>
         </Menu>
     </MenuBar>
     <HBox fx:id="mainSpace">
@@ -19,7 +24,7 @@
                 <panes>
                     <TitledPane text="Terminal">
                         <VBox>
-                            <TextArea fx:id="termOut" />
+                            <TextArea fx:id="termOut"/>
                             <TextField fx:id="terminal" onAction="#terminalAction"/>
                         </VBox>
                     </TitledPane>
@@ -27,7 +32,7 @@
             </Accordion>
         </VBox>
         <ScrollPane>
-            <Canvas fx:id="canvas"/>
+            <SWCanvas fx:id="canvas"/>
         </ScrollPane>
     </HBox>
     <HBox fx:id="footerSpace">

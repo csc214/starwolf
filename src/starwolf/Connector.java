@@ -21,7 +21,7 @@ public class Connector implements SerialPortEventListener{
     TextArea termDisplay;
     /** The port we're normally going to use. */
     private static final String PORT_NAMES[] = {
-            "/dev/tty.usbserial-A9007UX1", // Mac OS X
+            "/dev/tty.usbmodem2539041", // Mac OS X
             "/dev/ttyACM0", // Raspberry Pi
             "/dev/ttyUSB0", // Linux
             "COM4", // Windows

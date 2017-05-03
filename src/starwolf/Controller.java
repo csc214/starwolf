@@ -6,21 +6,18 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
+import javafx.scene.image.PixelReader;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Screen;
-import nom.tam.fits.Fits;
-import nom.tam.fits.FitsException;
-import nom.tam.fits.ImageData;
-import nom.tam.fits.ImageHDU;
+import nom.tam.fits.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -40,7 +37,7 @@ public class Controller {
     @FXML
     private TextField terminal;
     @FXML
-    private Canvas canvas;
+    private SWCanvas canvas;
     private GraphicsContext ctx;
     @FXML
     private HBox footerSpace;
@@ -48,26 +45,13 @@ public class Controller {
     private Label statusLeft;
     @FXML
     private Label statusRight;
+    private Header fitsHeader;
     private double w, h;
     private boolean debug = true;
 
     @FXML
     protected void initialize() {
-        System.out.println("initialize");
-        serialLink = new Connector();
-        serialLink.initialize(termOut);
-        Thread t = new Thread() {
-            public void run() {
-                //the following line will keep this app alive for 1000 seconds,
-                //waiting for events to occur and responding to them (printing incoming messages to console).
-                try {
-                    Thread.sleep(1000000);
-                } catch (InterruptedException ie) {
-                }
-            }
-        };
-        t.start();
-        System.out.println("initialized");
+        initSerialLink();
 
         Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
         w = screenBounds.getWidth();
@@ -77,9 +61,10 @@ public class Controller {
 
         ctx = canvas.getGraphicsContext2D();
         root.setPrefSize(w, h);
-        toolSpace.setPrefSize(toolSpaceWidth, mainSpaceHeight);
-        canvas.setWidth(w - toolSpaceWidth);
-        canvas.setHeight(mainSpaceHeight);
+        mainSpace.setPrefHeight(mainSpaceHeight);
+        toolSpace.setPrefWidth(toolSpaceWidth);
+        canvas.setHeight(mainSpaceHeight - 18);
+        canvas.setWidth(w - toolSpaceWidth - 2);
         statusLeft.setPrefWidth(w / 2.0);
         statusRight.setPrefWidth(w / 2.0);
         statusLeft.setAlignment(Pos.BASELINE_LEFT);
@@ -89,14 +74,11 @@ public class Controller {
         footerSpace.setBorder(new Border(new BorderStroke(Color.GRAY, BorderStrokeStyle.SOLID, CornerRadii.EMPTY,
                 new BorderWidths(1.0, 0.0, 1.0, 0.0))));
 
-        if (debug) {
-            System.out.println("screenBounds.getWidth() -> " + screenBounds.getWidth());
-            System.out.println("screenBounds.getHeight() -> " + screenBounds.getHeight());
-        }
+        if (debug) System.out.println("initialized");
     }
 
     @FXML
-    protected void menuActionOpen(ActionEvent event) {
+    protected void menuActionFileOpen(ActionEvent event) {
         try {
             FileChooser fileChooser = new FileChooser();
             File file;
@@ -120,36 +102,34 @@ public class Controller {
                 Fits f = new Fits(file);
                 ImageHDU hdu = (ImageHDU) f.getHDU(0);
                 ImageData imageData = hdu.getData();
-                hdu.info(System.out);
+
+                if (debug) hdu.info(System.out);
+
                 int[] axes = hdu.getAxes();
-                canvas.setWidth((double) axes[0]);
-                canvas.setHeight((double) axes[1]);
-
-                if (hdu.getBitPix() == 16) {
-                    short[][] buffer = (short[][]) imageData.getData();
-                    ctx.clearRect(0, 0, (double) axes[0], (double) axes[1]);
-
-                    for (int i = 0; i < axes[0]; ++i) {
-                        for (int j = 0; j < axes[1]; ++j) {
-                            double color = ((buffer[i][j] + hdu.getBZero())) / ((1 << hdu.getBitPix()) * 1.0);
-                            ctx.getPixelWriter().setColor(i, j, Color.color(color, color, color));
-                        }
-                    }
-                }
-
-                if (axes[0] > w || axes[1] > h) {
-
-                }
+                canvas.draw(imageData.getData(), axes[0], axes[1]);
             } else {
-                openFile(file);
+                Image image = new Image("file://" + file.getPath());
+                canvas.draw(image.getPixelReader(), (int) image.getWidth(), (int) image.getHeight());
             }
-        } catch (FitsException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
+        } catch (FitsException | IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @FXML
+    protected void menuActionFileSave(ActionEvent event) {
+
+    }
+
+    @FXML
+    protected void menuActionFileQuit(ActionEvent event) {
+        Platform.exit();
+        System.exit(0);
+    }
+
+    @FXML
+    protected void menuActionImageFFT(ActionEvent event) {
+
     }
 
     @FXML
@@ -166,21 +146,19 @@ public class Controller {
         System.out.println(temp);
     }
 
-    @FXML
-    protected void quit(ActionEvent event) {
-        Platform.exit();
-    }
-
-    private void openFile(final File file) {
-        Task t = new Task() {
-            @Override
-            protected Object call() throws Exception {
-                Image tmp = new Image("file:" + file.getAbsolutePath(), canvas.getWidth(), canvas.getHeight(), true, true);
-                ctx.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
-                ctx.drawImage(tmp, 0, 0);
-                return null;
+    private void initSerialLink() {
+        serialLink = new Connector();
+        serialLink.initialize(termOut);
+        Thread t = new Thread() {
+            public void run() {
+                //the following line will keep this app alive for 1000 seconds,
+                //waiting for events to occur and responding to them (printing incoming messages to console).
+                try {
+                    Thread.sleep(1000000);
+                } catch (InterruptedException ie) {
+                }
             }
         };
-        new Thread(t).start();
+        t.start();
     }
 }
