@@ -1,23 +1,22 @@
 package starwolf;
 
 import javafx.application.Platform;
-import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Label;
-import javafx.scene.control.MenuBar;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
-import javafx.scene.image.PixelReader;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Screen;
-import nom.tam.fits.*;
+import nom.tam.fits.Fits;
+import nom.tam.fits.FitsException;
+import nom.tam.fits.ImageData;
+import nom.tam.fits.ImageHDU;
+import org.controlsfx.control.SnapshotView;
+import org.controlsfx.control.StatusBar;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,8 +25,6 @@ public class Controller {
     private Connector serialLink;
     @FXML
     private VBox root;
-    @FXML
-    private MenuBar menuBar;
     @FXML
     private HBox mainSpace;
     @FXML
@@ -38,19 +35,14 @@ public class Controller {
     private TextField terminal;
     @FXML
     private SWCanvas canvas;
-    private GraphicsContext ctx;
     @FXML
-    private HBox footerSpace;
+    private StatusBar statusBar;
     @FXML
-    private Label statusLeft;
-    @FXML
-    private Label statusRight;
-    private Header fitsHeader;
-    private double w, h;
-    private boolean debug = true;
+    private SnapshotView snapshotView;
 
     @FXML
     protected void initialize() {
+        double w, h;
         initSerialLink();
 
         Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
@@ -59,26 +51,26 @@ public class Controller {
 
         double toolSpaceWidth = 200.0, mainSpaceHeight = h - 48.0;
 
-        ctx = canvas.getGraphicsContext2D();
         root.setPrefSize(w, h);
         mainSpace.setPrefHeight(mainSpaceHeight);
         toolSpace.setPrefWidth(toolSpaceWidth);
         canvas.setHeight(mainSpaceHeight - 18);
         canvas.setWidth(w - toolSpaceWidth - 2);
-        statusLeft.setPrefWidth(w / 2.0);
-        statusRight.setPrefWidth(w / 2.0);
-        statusLeft.setAlignment(Pos.BASELINE_LEFT);
-        statusRight.setAlignment(Pos.BASELINE_RIGHT);
         toolSpace.setBorder(new Border(new BorderStroke(Color.GRAY, BorderStrokeStyle.SOLID, CornerRadii.EMPTY,
                 new BorderWidths(0.0, 1.0, 0.0, 0.0))));
-        footerSpace.setBorder(new Border(new BorderStroke(Color.GRAY, BorderStrokeStyle.SOLID, CornerRadii.EMPTY,
-                new BorderWidths(1.0, 0.0, 1.0, 0.0))));
 
-        if (debug) System.out.println("initialized");
+        statusBar.setText("Initialized - OK");
+
+        snapshotView = new SnapshotView();
+        snapshotView.setNode(canvas);
+        snapshotView.setSelectionActive(true);
+        snapshotView.setSelectionActivityManaged(true);
     }
 
     @FXML
     protected void menuActionFileOpen(ActionEvent event) {
+        statusBar.setText("Opening File ... ");
+
         try {
             FileChooser fileChooser = new FileChooser();
             File file;
@@ -103,7 +95,7 @@ public class Controller {
                 ImageHDU hdu = (ImageHDU) f.getHDU(0);
                 ImageData imageData = hdu.getData();
 
-                if (debug) hdu.info(System.out);
+                hdu.info(System.out);
 
                 int[] axes = hdu.getAxes();
                 canvas.draw(imageData.getData(), axes[0], axes[1]);
@@ -111,6 +103,8 @@ public class Controller {
                 Image image = new Image("file://" + file.getPath());
                 canvas.draw(image.getPixelReader(), (int) image.getWidth(), (int) image.getHeight());
             }
+
+            statusBar.setText("OK");
         } catch (FitsException | IOException e) {
             e.printStackTrace();
         }
