@@ -1,53 +1,110 @@
 package starwolf;
 
-import javafx.scene.canvas.Canvas;
-import javafx.scene.image.PixelReader;
+import javafx.scene.image.*;
+import javafx.scene.paint.Color;
+
+import java.nio.Buffer;
+import java.nio.ByteBuffer;
+import java.nio.IntBuffer;
 
 /**
  * Created by oeathus on 4/27/17.
  */
-public class SWCanvas extends Canvas {
-    private int workingBuffer[][];
-    private int workingBifferWidth, workingBufferHeight;
+public class SWCanvas extends ImageView {
+    int workingBuffer[][];
+    WritableImage image;
+    PixelReader pixelReader;
+    PixelWriter pixelWriter;
+    int width, height;
 
-    public SWCanvas() {
+    SWCanvas() {
         super();
-        workingBuffer = new int[1024][1024];
     }
 
-    protected int[][] getWorkingBuffer() {
+    int getWidth(){
+        return width;
+    }
+    int getHeight(){
+        return height;
+    }
+
+    int[][] getWorkingBuffer() {
         return workingBuffer;
     }
 
-    protected void setWorkingBuffer(int[][] buffer){
+    void setWidth(int w){
+        width = w;
+        setFitWidth(width);
+    }
+
+    void setHeight(int h){
+        height = h;
+        setFitHeight(height);
+    }
+
+    void setWorkingBuffer(int[][] buffer) {
         workingBuffer = buffer;
     }
 
-    protected void draw(Object buffer, int width, int height) {
+    void draw(Object buffer, int w, int h) {
+        setWidth(w);
+        setHeight(h);
         workingBuffer = new int[width][height];
-        setWidth(width);
-        setHeight(height);
 
-        if(buffer instanceof PixelReader){
+        if (buffer instanceof PixelReader) {
             PixelReader pixelReader = (PixelReader) buffer;
             for (int y = 0; y < height; ++y)
                 for (int x = 0; x < width; ++x)
                     workingBuffer[x][y] = pixelReader.getArgb(x, y);
-        } else if(buffer instanceof int[][]){
+        } else if (buffer instanceof int[][]) {
             setWorkingBuffer((int[][]) buffer);
-        }else if(buffer instanceof short[][]){
+        } else if (buffer instanceof short[][]) {
             short[][] tmpBuffer = (short[][]) buffer;
             for (int y = 0; y < height; ++y)
                 for (int x = 0; x < width; ++x)
                     workingBuffer[x][y] = tmpBuffer[x][y];
         }
-        draw();
     }
 
-    protected void draw() {
-        this.getGraphicsContext2D().clearRect(0, 0, this.getWidth(), this.getHeight());
-        for (int y = 0; y < getHeight(); ++y)
-            for (int x = 0; x < getWidth(); ++x)
-                this.getGraphicsContext2D().getPixelWriter().setArgb(x, y, workingBuffer[x][y]);
+    void draw(){
+        image = new WritableImage(width, height);
+        pixelWriter = image.getPixelWriter();
+        pixelReader = new PixelReader() {
+            @Override
+            public PixelFormat getPixelFormat() {
+                return PixelFormat.getIntArgbPreInstance();
+            }
+
+            @Override
+            public int getArgb(int x, int y) {
+                return workingBuffer[x][y];
+            }
+
+            @Override
+            public Color getColor(int x, int y) {
+                return Color.grayRgb(workingBuffer[x][y]);
+            }
+
+            @Override
+            public <T extends Buffer> void getPixels(int x, int y, int w, int h, WritablePixelFormat<T> pixelformat, T buffer, int scanlineStride) {
+
+            }
+
+            @Override
+            public void getPixels(int x, int y, int w, int h, WritablePixelFormat<ByteBuffer> pixelformat, byte[] buffer, int offset, int scanlineStride) {
+
+            }
+
+            @Override
+            public void getPixels(int x, int y, int w, int h, WritablePixelFormat<IntBuffer> pixelformat, int[] buffer, int offset, int scanlineStride) {
+
+            }
+        };
+
+        for (int y = 0; y < height; ++y)
+            for (int x = 0; x < width; ++x)
+                pixelWriter.setColor(x, y, pixelReader.getColor(x, y));
+
+        setImage(image);
     }
 }

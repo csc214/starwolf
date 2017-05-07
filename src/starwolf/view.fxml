@@ -3,13 +3,12 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<?import org.controlsfx.control.SnapshotView?>
 <?import org.controlsfx.control.StatusBar?>
 <?import starwolf.SWCanvas?>
 <VBox fx:id="root"
       fx:controller="starwolf.Controller"
       xmlns:fx="http://javafx.com/fxml">
-    <MenuBar fx:id="menuBar">
+    <MenuBar>
         <Menu text="File">
             <MenuItem text="Open" onAction="#menuActionFileOpen"/>
             <MenuItem text="Save" onAction="#menuActionFileSave"/>
@@ -33,9 +32,7 @@
                 </panes>
             </Accordion>
         </VBox>
-        <ScrollPane>
-            <SWCanvas fx:id="canvas"/>
-        </ScrollPane>
+        <SWCanvas fx:id="canvas"/>
     </HBox>
     <StatusBar fx:id="statusBar"/>
 </VBox>

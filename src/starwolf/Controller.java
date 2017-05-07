@@ -53,18 +53,15 @@ public class Controller {
 
         root.setPrefSize(w, h);
         mainSpace.setPrefHeight(mainSpaceHeight);
+        mainSpace.setPickOnBounds(false);
+        mainSpace.setMouseTransparent(true);
         toolSpace.setPrefWidth(toolSpaceWidth);
-        canvas.setHeight(mainSpaceHeight - 18);
-        canvas.setWidth(w - toolSpaceWidth - 2);
+        canvas.setHeight((int) (mainSpaceHeight - 18));
+        canvas.setWidth((int) (w - toolSpaceWidth - 2));
         toolSpace.setBorder(new Border(new BorderStroke(Color.GRAY, BorderStrokeStyle.SOLID, CornerRadii.EMPTY,
                 new BorderWidths(0.0, 1.0, 0.0, 0.0))));
 
         statusBar.setText("Initialized - OK");
-
-        snapshotView = new SnapshotView();
-        snapshotView.setNode(canvas);
-        snapshotView.setSelectionActive(true);
-        snapshotView.setSelectionActivityManaged(true);
     }
 
     @FXML
@@ -98,11 +95,15 @@ public class Controller {
                 hdu.info(System.out);
 
                 int[] axes = hdu.getAxes();
+
                 canvas.draw(imageData.getData(), axes[0], axes[1]);
             } else {
-                Image image = new Image("file://" + file.getPath());
+                Image image = new Image("file:" + file.getAbsolutePath());
                 canvas.draw(image.getPixelReader(), (int) image.getWidth(), (int) image.getHeight());
             }
+            snapshotView.setNode(canvas);
+            snapshotView.setManaged(true);
+            snapshotView.setSelectionActivityManaged(true);
 
             statusBar.setText("OK");
         } catch (FitsException | IOException e) {
