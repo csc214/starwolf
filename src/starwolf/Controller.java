@@ -43,7 +43,6 @@ public class Controller {
     @FXML
     protected void initialize() {
         double w, h;
-        initSerialLink();
 
         Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
         w = screenBounds.getWidth();
@@ -65,6 +64,7 @@ public class Controller {
         snapshotView.setNode(canvas);
         snapshotView.setSelectionActive(true);
         snapshotView.setSelectionActivityManaged(true);
+        initSerialLink();
     }
 
     @FXML
@@ -98,10 +98,10 @@ public class Controller {
                 hdu.info(System.out);
 
                 int[] axes = hdu.getAxes();
-                canvas.draw(imageData.getData(), axes[0], axes[1]);
+                canvas.draw(imageData.getData());
             } else {
-                Image image = new Image("file://" + file.getPath());
-                canvas.draw(image.getPixelReader(), (int) image.getWidth(), (int) image.getHeight());
+                Image image = new Image("file:" + file.getAbsolutePath());
+                canvas.draw(image.getPixelReader());
             }
 
             statusBar.setText("OK");
@@ -134,15 +134,11 @@ public class Controller {
         terminal.clear();
     }
 
-    @FXML
-    public void terminalOut(String temp) {
-        termOut.appendText(temp + "\n");
-        System.out.println(temp);
-    }
 
     private void initSerialLink() {
         serialLink = new Connector();
         serialLink.initialize(termOut);
+        serialLink.setCurrentCanvas(canvas);
         Thread t = new Thread() {
             public void run() {
                 //the following line will keep this app alive for 1000 seconds,
