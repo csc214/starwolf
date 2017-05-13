@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -15,8 +16,6 @@ import nom.tam.fits.Fits;
 import nom.tam.fits.FitsException;
 import nom.tam.fits.ImageData;
 import nom.tam.fits.ImageHDU;
-import org.controlsfx.control.SnapshotView;
-import org.controlsfx.control.StatusBar;
 
 import java.io.File;
 import java.io.IOException;
@@ -36,9 +35,7 @@ public class Controller {
     @FXML
     private SWCanvas canvas;
     @FXML
-    private StatusBar statusBar;
-    @FXML
-    private SnapshotView snapshotView;
+    private Label statusBar;
 
     @FXML
     protected void initialize() {
@@ -54,7 +51,6 @@ public class Controller {
         root.setPrefSize(w, h);
         mainSpace.setPrefHeight(mainSpaceHeight);
         mainSpace.setPickOnBounds(false);
-        mainSpace.setMouseTransparent(true);
         toolSpace.setPrefWidth(toolSpaceWidth);
         canvas.setHeight((int) (mainSpaceHeight - 18));
         canvas.setWidth((int) (w - toolSpaceWidth - 2));

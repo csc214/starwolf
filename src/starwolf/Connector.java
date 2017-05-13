@@ -140,7 +140,7 @@ public class Connector implements SerialPortEventListener{
                 try {
                     System.out.println("Retrieving Image");
                     int fullsize = SWCanvas.xsize*SWCanvas.ysize*2;
-                    byte[] finalImage = new byte[SWCanvas.xsize*SWCanvas.ysize*2];
+                    byte[] finalImage = new byte[SWCanvas.xsize*SWCanvas.ysize*2+2];
 
                     while(offtotal < SWCanvas.xsize*SWCanvas.ysize*2) {
                         avail = dataIs.available();

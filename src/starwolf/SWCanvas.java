@@ -10,8 +10,8 @@ import javafx.scene.paint.Color;
 public class SWCanvas extends Canvas {
     private short originBuffer[][]; // untouched data from the camera
     private short workingBuffer[][];   // one of two swappable buffers actions are performed on
-    public static int xsize;  // region of interest width
-    public static int ysize;  // region of interest height
+    public static int xsize = 780;  // region of interest width
+    public static int ysize = 489;  // region of interest height
     public static int xframe;   // full frame width
     public static int yframe;   // full frame height
     public static int maxGray = 0;  // initialized to zero to capture max value in loop
@@ -52,6 +52,6 @@ public class SWCanvas extends Canvas {
         this.getGraphicsContext2D().clearRect(0, 0, this.getWidth(), this.getHeight());
         for (int y = 0; y < getHeight(); ++y)
             for (int x = 0; x < getWidth(); ++x)
-                this.getGraphicsContext2D().getPixelWriter().setColor(x, y, Color.grayRgb(workingBuffer[x][y]%255));
+                this.getGraphicsContext2D().getPixelWriter().setColor(x, y, Color.grayRgb(workingBuffer[x][y]%256));
     }
 }

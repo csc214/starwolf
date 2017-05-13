@@ -35,7 +35,6 @@
         </ScrollPane>
     </HBox>
     <HBox fx:id="footerSpace">
-        <Label fx:id="statusLeft" text="LeftStatus"/>
-        <Label fx:id="statusRight" text="RightStatus"/>
+        <Label fx:id="statusBar" text=""/>
     </HBox>
 </VBox>
