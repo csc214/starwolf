@@ -35,7 +35,7 @@ public class Controller {
     @FXML
     private SWCanvas canvas;
     @FXML
-    private Label statusBar;
+    private Label statusLeft;
 
     @FXML
     protected void initialize() {
@@ -57,12 +57,12 @@ public class Controller {
         toolSpace.setBorder(new Border(new BorderStroke(Color.GRAY, BorderStrokeStyle.SOLID, CornerRadii.EMPTY,
                 new BorderWidths(0.0, 1.0, 0.0, 0.0))));
 
-        statusBar.setText("Initialized - OK");
+        statusLeft.setText("Initialized - OK");
     }
 
     @FXML
     protected void menuActionFileOpen(ActionEvent event) {
-        statusBar.setText("Opening File ... ");
+        statusLeft.setText("Opening File ... ");
 
         try {
             FileChooser fileChooser = new FileChooser();
@@ -97,7 +97,7 @@ public class Controller {
                 canvas.fillBuffer(image.getPixelReader());
             }
 
-            statusBar.setText("OK");
+            statusLeft.setText("OK");
         } catch (FitsException | IOException e) {
             e.printStackTrace();
         }
