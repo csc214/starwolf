@@ -43,6 +43,7 @@ public class Controller {
     @FXML
     protected void initialize() {
         double w, h;
+        initSerialLink();
 
         Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
         w = screenBounds.getWidth();
@@ -52,19 +53,15 @@ public class Controller {
 
         root.setPrefSize(w, h);
         mainSpace.setPrefHeight(mainSpaceHeight);
+        mainSpace.setPickOnBounds(false);
+        mainSpace.setMouseTransparent(true);
         toolSpace.setPrefWidth(toolSpaceWidth);
-        canvas.setHeight(mainSpaceHeight - 18);
-        canvas.setWidth(w - toolSpaceWidth - 2);
+        canvas.setHeight((int) (mainSpaceHeight - 18));
+        canvas.setWidth((int) (w - toolSpaceWidth - 2));
         toolSpace.setBorder(new Border(new BorderStroke(Color.GRAY, BorderStrokeStyle.SOLID, CornerRadii.EMPTY,
                 new BorderWidths(0.0, 1.0, 0.0, 0.0))));
 
         statusBar.setText("Initialized - OK");
-
-        snapshotView = new SnapshotView();
-        snapshotView.setNode(canvas);
-        snapshotView.setSelectionActive(true);
-        snapshotView.setSelectionActivityManaged(true);
-        initSerialLink();
     }
 
     @FXML
