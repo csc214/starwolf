@@ -3,24 +3,120 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import starwolf.SWCanvas?>
-<VBox fx:id="root"
-      fx:controller="starwolf.Controller"
-      xmlns:fx="http://javafx.com/fxml">
-    <MenuBar>
-        <Menu text="File">
-            <MenuItem text="Open" onAction="#menuActionFileOpen"/>
-            <MenuItem text="Save" onAction="#menuActionFileSave"/>
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
+<VBox fx:id="root" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.102"
+      fx:controller="starwolf.Controller">
+    <MenuBar fx:id="menuBar">
+        <Menu mnemonicParsing="false" text="File">
+            <MenuItem mnemonicParsing="false" onAction="#menuActionFileOpen" text="Open"/>
+            <MenuItem mnemonicParsing="false" onAction="#menuActionFileSave" text="Save"/>
             <SeparatorMenuItem/>
-            <MenuItem text="Quit" onAction="#menuActionFileQuit"/>
+            <MenuItem mnemonicParsing="false" text="Header"/>
+            <SeparatorMenuItem/>
+            <MenuItem mnemonicParsing="false" onAction="#menuActionFileQuit" text="Quit"/>
         </Menu>
-        <Menu text="Image">
-            <MenuItem text="FFT" onAction="#menuActionImageFFT"/>
+        <Menu mnemonicParsing="false" text="Edit">
+        </Menu>
+        <Menu mnemonicParsing="false" text="View">
+        </Menu>
+        <Menu mnemonicParsing="false" text="Help">
         </Menu>
     </MenuBar>
     <HBox fx:id="mainSpace">
         <VBox fx:id="toolSpace">
             <Accordion>
                 <panes>
+                    <TitledPane text="Connector">
+                        <VBox>
+                            <HBox>
+                                <Label text="Device Ports"/>
+                                <ComboBox promptText="Choose ...">
+                                    <items>
+                                        <FXCollections fx:factory="observableArrayList">
+                                            <String fx:value="Apples"/>
+                                            <String fx:value="Oranges"/>
+                                        </FXCollections>
+                                    </items>
+                                </ComboBox>
+                            </HBox>
+                            <HBox>
+                                <VBox>
+                                    <Button text="Connect"/>
+                                    <Button text="Grab Meta"/>
+                                </VBox>
+                            </HBox>
+                            <HBox>
+                                <VBox>
+                                    <Label text="x-size"/>
+                                    <HBox>
+                                        <TextField/><Button text="set" textOverrun="CLIP"/>
+                                    </HBox>
+                                    <Label text="y-size"/>
+                                    <HBox>
+                                        <TextField/><Button text="set" textOverrun="CLIP"/>
+                                    </HBox>
+                                </VBox>
+                                <VBox>
+                                    <Label text="x-offset"/>
+                                    <HBox>
+                                        <TextField/><Button text="set" textOverrun="CLIP"/>
+                                    </HBox>
+                                    <Label text="y-offset"/>
+                                    <HBox>
+                                        <TextField/><Button text="set" textOverrun="CLIP"/>
+                                    </HBox>
+                                </VBox>
+                            </HBox>
+                            <HBox>
+                                <VBox>
+                                    <Label text="x-bin"/>
+                                    <HBox>
+                                        <TextField/><Button text="set" textOverrun="CLIP"/>
+                                    </HBox>
+                                    <Label text="xmsec"/>
+                                    <HBox>
+                                        <TextField/><Button text="set" textOverrun="CLIP"/>
+                                    </HBox>
+                                </VBox>
+                                <VBox>
+                                    <Label text="y-bin"/>
+                                    <HBox>
+                                        <TextField/><Button text="set" textOverrun="CLIP"/>
+                                    </HBox>
+                                </VBox>
+                            </HBox>
+                            <HBox>
+                                <VBox>
+                                    <Button text="Capture"/>
+                                    <Button text="Expose"/>
+                                </VBox>
+                                <VBox>
+                                    <Button text="Flush"/>
+                                    <Button text="Power Off"/>
+                                </VBox>
+                            </HBox>
+                        </VBox>
+                    </TitledPane>
+                    <TitledPane text="Process">
+                        <VBox>
+                            <HBox>
+                                <VBox>
+                                    <Label text="minimum brightness"/>
+                                    <HBox>
+                                        <TextField/><Button text="set" textOverrun="CLIP"/>
+                                    </HBox>
+                                </VBox>
+                                <VBox>
+                                    <Label text="maximum brightness"/>
+                                    <HBox>
+                                        <TextField/><Button text="set" textOverrun="CLIP"/>
+                                    </HBox>
+                                </VBox>
+                            </HBox>
+                            <Button text="FHT"/>
+                        </VBox>
+                    </TitledPane>
                     <TitledPane text="Terminal">
                         <VBox>
                             <TextArea fx:id="termOut"/>
@@ -35,6 +131,7 @@
         </ScrollPane>
     </HBox>
     <HBox fx:id="footerSpace">
-        <Label fx:id="statusBar" text=""/>
+        <Label fx:id="statusLeft" text="LeftStatus"/>
+        <Label fx:id="statusRight" text="RightStatus"/>
     </HBox>
 </VBox>

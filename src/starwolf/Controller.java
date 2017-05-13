@@ -46,7 +46,7 @@ public class Controller {
         w = screenBounds.getWidth();
         h = screenBounds.getHeight() - 24.0;
 
-        double toolSpaceWidth = 200.0, mainSpaceHeight = h - 48.0;
+        double toolSpaceWidth = 350.0, mainSpaceHeight = h - 48.0;
 
         root.setPrefSize(w, h);
         mainSpace.setPrefHeight(mainSpaceHeight);
