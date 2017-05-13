@@ -98,10 +98,10 @@ public class Controller {
                 hdu.info(System.out);
 
                 int[] axes = hdu.getAxes();
-                canvas.draw(imageData.getData());
+                canvas.fillBuffer(imageData.getData());
             } else {
                 Image image = new Image("file:" + file.getAbsolutePath());
-                canvas.draw(image.getPixelReader());
+                canvas.fillBuffer(image.getPixelReader());
             }
 
             statusBar.setText("OK");

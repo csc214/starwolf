@@ -27,6 +27,7 @@ public class Connector implements SerialPortEventListener{
     InputStream instream;
     SWCanvas currentCanvas;
     /** The port we're normally going to use. */
+
     private static final String PORT_NAMES[] = {
             "/dev/tty.usbmodem2539041", // Mac OS X
             "/dev/ttyACM0", // Raspberry Pi
@@ -164,7 +165,7 @@ public class Connector implements SerialPortEventListener{
                     }
 
                     gettingImage = false;
-                    currentCanvas.draw(drawAble);
+                    currentCanvas.fillBuffer(drawAble);
                 } catch (Exception e) {
                     System.err.println(e.toString());
                     System.out.println("avail  " + avail);
@@ -176,8 +177,8 @@ public class Connector implements SerialPortEventListener{
         // Ignore all the other eventTypes, but you should consider the other ones.
     }
 
-    public void setCurrentCanvas(SWCanvas hey){
-        currentCanvas = hey;
+    public void setCurrentCanvas(SWCanvas passedIn){
+        currentCanvas = passedIn;
     }
 
 }

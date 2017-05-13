@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.*?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
-<?import org.controlsfx.control.SnapshotView?>
-<?import org.controlsfx.control.StatusBar?>
+<?import javafx.scene.layout.*?>
 <?import starwolf.SWCanvas?>
 <VBox fx:id="root"
       fx:controller="starwolf.Controller"
@@ -37,5 +34,8 @@
             <SWCanvas fx:id="canvas"/>
         </ScrollPane>
     </HBox>
-    <StatusBar fx:id="statusBar"/>
+    <HBox fx:id="footerSpace">
+        <Label fx:id="statusLeft" text="LeftStatus"/>
+        <Label fx:id="statusRight" text="RightStatus"/>
+    </HBox>
 </VBox>
