@@ -19,6 +19,10 @@
         </Menu>
         <Menu mnemonicParsing="false" text="View">
         </Menu>
+        <Menu mnemonicParsing="false" text="Process">
+            <MenuItem mnemonicParsing="false" onAction="#menuActionImageDeInterlace" text="DeInterlace"/>
+            <MenuItem mnemonicParsing="false" onAction="#menuActionImageFHT" text="FHT"/>
+        </Menu>
         <Menu mnemonicParsing="false" text="Help">
         </Menu>
     </MenuBar>
