@@ -75,6 +75,11 @@ public class Controller {
     }
 
     @FXML
+    protected void reDraw() {
+        canvas.draw();
+    }
+
+    @FXML
     protected void grabMeta() {
         Connector.command = "xsize?";
         serialLink.write("xsize?");

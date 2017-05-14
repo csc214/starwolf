@@ -52,21 +52,21 @@
                                 <VBox>
                                     <Label text="x-size"/>
                                     <HBox>
-                                        <TextField/><Button text="↺" textOverrun="CLIP"/>
+                                        <TextField/><Button text="↺"/>
                                     </HBox>
                                     <Label text="y-size"/>
                                     <HBox>
-                                        <TextField/><Button text="↺" textOverrun="CLIP"/>
+                                        <TextField/><Button text="↺"/>
                                     </HBox>
                                 </VBox>
                                 <VBox>
                                     <Label text="x-offset"/>
                                     <HBox>
-                                        <TextField/><Button text="↺" textOverrun="CLIP"/>
+                                        <TextField/><Button text="↺"/>
                                     </HBox>
                                     <Label text="y-offset"/>
                                     <HBox>
-                                        <TextField/><Button text="↺" textOverrun="CLIP"/>
+                                        <TextField/><Button text="↺"/>
                                     </HBox>
                                 </VBox>
                             </HBox>
@@ -74,23 +74,24 @@
                                 <VBox>
                                     <Label text="x-bin"/>
                                     <HBox>
-                                        <TextField/><Button text="↺" textOverrun="CLIP"/>
+                                        <TextField/><Button text="↺"/>
                                     </HBox>
                                     <Label text="xmsec"/>
                                     <HBox>
-                                        <TextField/><Button text="↺" textOverrun="CLIP"/>
+                                        <TextField/><Button text="↺"/>
                                     </HBox>
                                 </VBox>
                                 <VBox>
                                     <Label text="y-bin"/>
                                     <HBox>
-                                        <TextField/><Button text="↺" textOverrun="CLIP"/>
+                                        <TextField/><Button text="↺"/>
                                     </HBox>
                                 </VBox>
                             </HBox>
                             <HBox>
                                 <VBox>
                                     <Button text="Capture"/>
+                                    <Button text="Redraw" onAction="#reDraw" />
                                     <Button text="Expose"/>
                                 </VBox>
                                 <VBox>
