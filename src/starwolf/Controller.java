@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -16,7 +17,6 @@ import nom.tam.fits.Fits;
 import nom.tam.fits.FitsException;
 import nom.tam.fits.ImageData;
 import nom.tam.fits.ImageHDU;
-
 import java.io.File;
 import java.io.IOException;
 
@@ -36,6 +36,8 @@ public class Controller {
     private SWCanvas canvas;
     @FXML
     private Label statusLeft;
+    @FXML
+    private ComboBox portBox;
 
     @FXML
     protected void initialize() {
@@ -58,7 +60,26 @@ public class Controller {
                 new BorderWidths(0.0, 1.0, 0.0, 0.0))));
 
         statusLeft.setText("Initialized - OK");
+        updatePortList();
     }
+
+    @FXML
+    protected void updatePortList() {
+        portBox.getItems().clear();
+        portBox.getItems().addAll(Connector.listPorts());
+    }
+
+    @FXML
+    protected void cameraConnect() {
+        serialLink.connectToCamera((String) portBox.getSelectionModel().getSelectedItem());
+    }
+
+    @FXML
+    protected void grabMeta() {
+        Connector.command = "xsize?";
+        serialLink.write("xsize?");
+    }
+
 
     @FXML
     protected void menuActionFileOpen(ActionEvent event) {
@@ -127,6 +148,7 @@ public class Controller {
         terminal.clear();
     }
 
+    @FXML
 
     private void initSerialLink() {
         serialLink = new Connector();

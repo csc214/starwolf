@@ -14,6 +14,8 @@ public class SWCanvas extends Canvas {
     public static int ysize = 489;  // region of interest height
     public static int xframe;   // full frame width
     public static int yframe;   // full frame height
+    public static int xoffset;   // region of interest offset
+    public static int yoffset;   // region of interest offset
     public static int maxGray = 0;  // initialized to zero to capture max value in loop
     public static int minGray= 32767;   // initialized to the max value to capture min value in loop
     public static int desMin;   // used to set black level of image

@@ -1,39 +1,49 @@
 package starwolf;
 
-import java.awt.*;
 import java.io.*;
 
 import gnu.io.CommPortIdentifier;
 import gnu.io.SerialPort;
 import gnu.io.SerialPortEvent;
 import gnu.io.SerialPortEventListener;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.control.TextArea;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.ShortBuffer;
 
-import java.util.Arrays;
-import java.util.Enumeration;
-import java.util.Scanner;
+
+import java.util.*;
+import java.util.List;
 
 /**
  * Created by fig on 3/30/2017.
  */
 public class Connector implements SerialPortEventListener{
-    public static boolean gettingImage = false;
+    public static String command = "none";
     SerialPort serialPort;
     TextArea termDisplay;
     InputStream instream;
     SWCanvas currentCanvas;
+    private static HashMap portMap = new HashMap();
+    static String response = null;
     /** The port we're normally going to use. */
 
-    private static final String PORT_NAMES[] = {
-            "/dev/tty.usbmodem2539041", // Mac OS X
-            "/dev/ttyACM0", // Raspberry Pi
-            "/dev/ttyUSB0", // Linux
-            "COM4", "COM5" // Windows
-    };
+
+    public static List listPorts() {
+        Enumeration ports = null;
+        ports = CommPortIdentifier.getPortIdentifiers();
+        List<String> portList = new ArrayList<String>();
+        while (ports.hasMoreElements()) {
+            CommPortIdentifier curPort = (CommPortIdentifier) ports.nextElement();
+            //get only serial ports
+            if (curPort.getPortType() == CommPortIdentifier.PORT_SERIAL) {
+                portList.add(curPort.getName());
+                portMap.put(curPort.getName(), curPort);
+
+            }
+        }
+        return portList;
+    }
     /**
      * A BufferedReader which will be fed by a InputStreamReader
      * converting the bytes into characters
@@ -50,26 +60,13 @@ public class Connector implements SerialPortEventListener{
     public void initialize(TextArea term) {
         termDisplay = term;
         System.out.println("Begin Connector Init");
-        CommPortIdentifier portId = null;
-        Enumeration portEnum = CommPortIdentifier.getPortIdentifiers();
+    }
 
-        //First, Find an instance of serial port as set in PORT_NAMES.
-        while (portEnum.hasMoreElements()) {
-            CommPortIdentifier currPortId = (CommPortIdentifier) portEnum.nextElement();
-            for (String portName : PORT_NAMES) {
-                if (currPortId.getName().equals(portName)) {
-                    portId = currPortId;
-                    break;
-                }
-            }
-        }
-        if (portId == null) {
-            System.out.println("Could not find COM port.");
-            return;
-        }
+    public void connectToCamera(String selectedPort){
 
         try {
             // open serial port, and use class name for the appName.
+            CommPortIdentifier portId = (CommPortIdentifier)portMap.get(selectedPort);
             serialPort = (SerialPort) portId.open(this.getClass().getName(),
                     TIME_OUT);
 
@@ -106,15 +103,17 @@ public class Connector implements SerialPortEventListener{
 
     public void write(String mess) {
         System.out.println("writing");
-        if(mess.contentEquals("grimg") || mess.contentEquals("grimg_demo")||mess.contentEquals("GRIMG") || mess.contentEquals("GRIMG_DEMO")){
-            gettingImage = true;
-            System.out.println("gettingImage is true");
+        if(mess.matches(".*(grimg|grimg_demo|GRIMG|GRIMG_DEMO).*")){
+            command = "grimg";
+            System.out.println("getting Image");
+        }
+        if(mess.matches(".*(xsize?|ysize?|xframe?|yframe?).*")){
+            command = mess;
+            System.out.println("getting:" + mess);
         }
         try {
-            System.out.println("beginning output");
             output.write((mess + "\n").getBytes());
             output.flush();
-            System.out.println("Flushed");
         } catch (Exception e) {
             System.err.println(e.toString());
         }
@@ -125,22 +124,29 @@ public class Connector implements SerialPortEventListener{
      */
     public synchronized void serialEvent(SerialPortEvent oEvent) {
         if (oEvent.getEventType() == SerialPortEvent.DATA_AVAILABLE) {
-            if(gettingImage == false) {
+            if(command.contentEquals("none")) {
                 try {
                     byte[] stringBuff = new byte[1024];
                     dataIs.read(stringBuff);
-                    termDisplay.appendText(new String(stringBuff, "UTF-8"));
+                    String rawString = new String(stringBuff, "UTF-8");
+                    termDisplay.appendText(rawString);
+                    rawString = rawString.trim();
+                    if(rawString.endsWith(" OK")) {
+                        response = rawString.substring(0, rawString.length() - 3);
+                    } else {
+                        response = rawString;
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-            } else {
+            } else if(command.contentEquals("grimg")) {
                 int avail = 0;
                 int offset = 0;
                 int offtotal = 0;
                 try {
                     System.out.println("Retrieving Image");
                     int fullsize = SWCanvas.xsize*SWCanvas.ysize*2;
-                    byte[] finalImage = new byte[SWCanvas.xsize*SWCanvas.ysize*2+2];
+                    byte[] finalImage = new byte[SWCanvas.xsize*SWCanvas.ysize*2];
 
                     while(offtotal < SWCanvas.xsize*SWCanvas.ysize*2) {
                         avail = dataIs.available();
@@ -164,7 +170,7 @@ public class Connector implements SerialPortEventListener{
                     }
                     }
 
-                    gettingImage = false;
+                    command = "none";
                     currentCanvas.fillBuffer(drawAble);
                 } catch (Exception e) {
                     System.err.println(e.toString());
@@ -172,7 +178,46 @@ public class Connector implements SerialPortEventListener{
                     System.out.println("offset  " + offset);
                     System.out.println("offtotal  " + offtotal);
                 }
+            } else {
+                try {
+                    byte[] stringBuff = new byte[32];
+                    dataIs.read(stringBuff);
+                    String rawString = new String(stringBuff, "UTF-8");
+                    rawString = rawString.trim();
+                    if(rawString.endsWith(" OK")) {
+                        response = rawString.substring(0, rawString.length() - 3);
+                    } else {
+                        response = rawString;
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                switch(command){
+                    case "xsize?":
+                        SWCanvas.xsize = Integer.parseInt(response);
+                        break;
+
+                    case "ysize?":
+                        SWCanvas.ysize = Integer.parseInt(response);
+                        break;
+
+                    case "xframe?":
+                        SWCanvas.xframe = Integer.parseInt(response);
+                        break;
+
+                    case "yframe?":
+                        SWCanvas.yframe = Integer.parseInt(response);
+                        break;
+
+                }
+                System.out.print(response);
+                command = "none";
             }
+        }
+
+        if (oEvent.getEventType() == SerialPortEvent.OUTPUT_BUFFER_EMPTY){
+            System.out.println("OUTPUT BUFFER EMPTY");
         }
         // Ignore all the other eventTypes, but you should consider the other ones.
     }

@@ -4,7 +4,6 @@
 <?import javafx.scene.layout.*?>
 <?import starwolf.SWCanvas?>
 <?import javafx.collections.FXCollections?>
-<?import java.lang.String?>
 <VBox fx:id="root" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.102"
       fx:controller="starwolf.Controller">
     <MenuBar fx:id="menuBar">
@@ -31,40 +30,39 @@
                         <VBox>
                             <HBox>
                                 <Label text="Device Ports"/>
-                                <ComboBox promptText="Choose ...">
+                                <ComboBox promptText="Choose ..." fx:id="portBox">
                                     <items>
                                         <FXCollections fx:factory="observableArrayList">
-                                            <String fx:value="Apples"/>
-                                            <String fx:value="Oranges"/>
                                         </FXCollections>
                                     </items>
                                 </ComboBox>
+                                <Button text="Refresh" onAction="#updatePortList" />
                             </HBox>
                             <HBox>
                                 <VBox>
-                                    <Button text="Connect"/>
-                                    <Button text="Grab Meta"/>
+                                    <Button text="Connect" onAction="#cameraConnect"/>
+                                    <Button text="Grab Meta" onAction="#grabMeta"/>
                                 </VBox>
                             </HBox>
                             <HBox>
                                 <VBox>
                                     <Label text="x-size"/>
                                     <HBox>
-                                        <TextField/><Button text="set" textOverrun="CLIP"/>
+                                        <TextField/><Button text="↺" textOverrun="CLIP"/>
                                     </HBox>
                                     <Label text="y-size"/>
                                     <HBox>
-                                        <TextField/><Button text="set" textOverrun="CLIP"/>
+                                        <TextField/><Button text="↺" textOverrun="CLIP"/>
                                     </HBox>
                                 </VBox>
                                 <VBox>
                                     <Label text="x-offset"/>
                                     <HBox>
-                                        <TextField/><Button text="set" textOverrun="CLIP"/>
+                                        <TextField/><Button text="↺" textOverrun="CLIP"/>
                                     </HBox>
                                     <Label text="y-offset"/>
                                     <HBox>
-                                        <TextField/><Button text="set" textOverrun="CLIP"/>
+                                        <TextField/><Button text="↺" textOverrun="CLIP"/>
                                     </HBox>
                                 </VBox>
                             </HBox>
@@ -72,17 +70,17 @@
                                 <VBox>
                                     <Label text="x-bin"/>
                                     <HBox>
-                                        <TextField/><Button text="set" textOverrun="CLIP"/>
+                                        <TextField/><Button text="↺" textOverrun="CLIP"/>
                                     </HBox>
                                     <Label text="xmsec"/>
                                     <HBox>
-                                        <TextField/><Button text="set" textOverrun="CLIP"/>
+                                        <TextField/><Button text="↺" textOverrun="CLIP"/>
                                     </HBox>
                                 </VBox>
                                 <VBox>
                                     <Label text="y-bin"/>
                                     <HBox>
-                                        <TextField/><Button text="set" textOverrun="CLIP"/>
+                                        <TextField/><Button text="↺" textOverrun="CLIP"/>
                                     </HBox>
                                 </VBox>
                             </HBox>
