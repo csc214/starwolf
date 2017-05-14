@@ -94,6 +94,7 @@ public class Controller {
                 canvas.fillBuffer(imageData.getData());
             } else {
                 Image image = new Image("file:" + file.getAbsolutePath());
+                canvas.setXYSize((int) image.getWidth(), (int) image.getHeight());
                 canvas.fillBuffer(image.getPixelReader());
             }
 
@@ -115,8 +116,13 @@ public class Controller {
     }
 
     @FXML
-    protected void menuActionImageFFT(ActionEvent event) {
+    protected void menuActionImageDeInterlace(ActionEvent event) {
+        canvas.deinterlace();
+    }
 
+    @FXML
+    protected void menuActionImageFHT(ActionEvent event) {
+        canvas.fasthartley();
     }
 
     @FXML
