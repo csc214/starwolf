@@ -72,15 +72,19 @@ public class SWCanvas extends Canvas {
         }
     }
 
-    short[] getBufferOneD(){
+    short[] getBufferOneD() {
         short[] tmp = new short[xsize * ysize];
-        for(int j = 0; j < ysize; ++j){
-            for(int i = 0; i < xsize; ++i){
+        for (int j = 0; j < ysize; ++j) {
+            for (int i = 0; i < xsize; ++i) {
                 tmp[j * xsize + i] = workingBuffer[i][j];
             }
         }
 
         return tmp;
+    }
+
+    short[][] getBufferTwoD() {
+        return workingBuffer;
     }
 
     protected Color shortToColor(short value) {
@@ -165,6 +169,16 @@ public class SWCanvas extends Canvas {
         for (int j = 0; j < ysize; ++j) {
             for (int i = 0; i < xsize; ++i) {
                 tmp[i][j] = (short) (c * Math.log(originBuffer[i][j] + 1));
+            }
+        }
+        fillBuffer(tmp);
+    }
+
+    protected void gammaTransform(double c) {
+        short[][] tmp = new short[xsize][ysize];
+        for (int j = 0; j < ysize; ++j) {
+            for (int i = 0; i < xsize; ++i) {
+                tmp[i][j] = (short) (255 * Math.pow((double) originBuffer[i][j] / 255.0, c));
             }
         }
         fillBuffer(tmp);
