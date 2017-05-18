@@ -68,19 +68,6 @@
                                         <Button text="↺" onAction="#upYSIZE"/>
                                     </HBox>
                                 </VBox>
-                                <!--<VBox>
-                                    <Label text="x-offset"/>
-                                    <HBox>
-                                        <TextField fx:id="tfXOFFS" />
-                                        <Button text="↺"/>
-                                    </HBox>
-                                    <Label text="y-offset"/>
-                                    <HBox>
-                                        <TextField fx:id="tfYOFFS" />
-                                        <Button text="↺"/>
-                                    </HBox>
-                                </VBox>
-                                -->
                             </HBox>
                             <HBox>
                                 <VBox>
@@ -130,15 +117,25 @@
                                 </VBox>
                             </HBox>
                             <VBox>
-                                <Button text="FHT"/>
-                                <Slider fx:id="slider" min="-3" max="6" value="1" majorTickUnit="0.01"/>
+                                <HistogramCanvas fx:id="histogram"/>
+                                <Button text="Render" onAction="#renderHistogram"/>
                             </VBox>
-                        </VBox>
-                    </TitledPane>
-                    <TitledPane text="Histogram">
-                        <VBox>
-                            <HistogramCanvas fx:id="histogram"/>
-                            <Button text="Render" onAction="#renderHistogram"/>
+                            <VBox>
+                                <HBox>
+                                    <Label text="Log Transform"/>
+                                    <Label fx:id="log_val"/>
+                                </HBox>
+                                <Slider fx:id="log_slider" min="-3" max="6" value="1" majorTickUnit="0.01"
+                                        snapToTicks="true"/>
+                            </VBox>
+                            <VBox>
+                                <HBox>
+                                    <Label text="Gamma Correction"/>
+                                    <Label fx:id="gamma_val"/>
+                                </HBox>
+                                <Slider fx:id="gamma_slider" min="-3" max="6" value="1" majorTickUnit="0.01"
+                                        snapToTicks="true"/>
+                            </VBox>
                         </VBox>
                     </TitledPane>
                     <TitledPane text="Terminal">
