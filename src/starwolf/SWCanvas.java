@@ -6,6 +6,8 @@ import javafx.scene.image.PixelReader;
 import javafx.scene.paint.Color;
 import javafx.scene.image.Image;
 
+import java.util.Arrays;
+
 /**
  * Created by oeathus on 4/27/17.
  */
@@ -13,7 +15,7 @@ public class SWCanvas extends Canvas {
     private short originBuffer[][]; // untouched data from the camera
     private short workingBuffer[][];   // one of two swappable buffers actions are performed on
     public static int xsize = 780;  // region of interest width
-    public static int ysize = 489;  // region of interest height
+    public static int ysize = 495;  // region of interest height
     public static int xframe;   // full frame width
     public static int yframe;   // full frame height
     public static int xoffset;   // region of interest offset
@@ -30,6 +32,8 @@ public class SWCanvas extends Canvas {
 
     public SWCanvas() {
         super();
+        setWidth(xsize);
+        setHeight(ysize);
     }
 
     public void fillBuffer(Object buffer) {
@@ -78,7 +82,7 @@ public class SWCanvas extends Canvas {
         for (int y = 0; y < ysize; ++y)
             for (int x = 0; x < xsize; ++x)
                 this.getGraphicsContext2D().getPixelWriter().setColor(x, y, shortToColor(workingBuffer[x][y]));
-        System.out.println("Drawing Done");
+        System.out.println(Arrays.deepToString(workingBuffer));
     }
 
     public void setXYSize(int xs, int ys) {

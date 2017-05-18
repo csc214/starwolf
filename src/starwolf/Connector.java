@@ -104,7 +104,7 @@ public class Connector implements SerialPortEventListener{
     public void write(String mess) {
         System.out.println("writing");
         if(mess.matches(".*(grimg|grimg_demo|GRIMG|GRIMG_DEMO).*")){
-            command = "grimg";
+            command = "GRIMG";
             System.out.println("getting Image");
         }
         if(mess.matches(".*(xsize?|ysize?|xframe?|yframe?).*")){
@@ -129,17 +129,17 @@ public class Connector implements SerialPortEventListener{
                     byte[] stringBuff = new byte[1024];
                     dataIs.read(stringBuff);
                     String rawString = new String(stringBuff, "UTF-8");
-                    termDisplay.appendText(rawString);
+                    //termDisplay.appendText(rawString);
                     rawString = rawString.trim();
                     if(rawString.endsWith(" OK")) {
-                        response = rawString.substring(0, rawString.length() - 3);
+                        //response = rawString.substring(0, rawString.length() - 3);
                     } else {
-                        response = rawString;
+                        //response = rawString;
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-            } else if(command.contentEquals("grimg")) {
+            } else if(command.contentEquals("GRIMG")) {
                 int avail = 0;
                 int offset = 0;
                 int offtotal = 0;
@@ -158,6 +158,7 @@ public class Connector implements SerialPortEventListener{
                             break;
                         }
                         offtotal+=offset;
+                        System.out.println(offtotal);
                     }
                     System.out.println("Finished byte loop");
                     System.out.println(offtotal);
@@ -182,13 +183,13 @@ public class Connector implements SerialPortEventListener{
                 try {
                     byte[] stringBuff = new byte[32];
                     dataIs.read(stringBuff);
-                    String rawString = new String(stringBuff, "UTF-8");
-                    rawString = rawString.trim();
-                    if(rawString.endsWith(" OK")) {
+                    //String rawString = new String(stringBuff, "UTF-8");
+                    //rawString = rawString.trim();
+                    /*if(rawString.endsWith(" OK")) {
                         response = rawString.substring(0, rawString.length() - 3);
                     } else {
                         response = rawString;
-                    }
+                    }*/
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -211,7 +212,7 @@ public class Connector implements SerialPortEventListener{
                         break;
 
                 }
-                System.out.print(response);
+                //System.out.print(response);
                 command = "none";
             }
         }

@@ -54,8 +54,6 @@ public class Controller {
         mainSpace.setPrefHeight(mainSpaceHeight);
         mainSpace.setPickOnBounds(false);
         toolSpace.setPrefWidth(toolSpaceWidth);
-        canvas.setHeight((int) (mainSpaceHeight - 18));
-        canvas.setWidth((int) (w - toolSpaceWidth - 2));
         toolSpace.setBorder(new Border(new BorderStroke(Color.GRAY, BorderStrokeStyle.SOLID, CornerRadii.EMPTY,
                 new BorderWidths(0.0, 1.0, 0.0, 0.0))));
 
