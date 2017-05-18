@@ -102,12 +102,11 @@ public class Connector implements SerialPortEventListener{
     }
 
     public void write(String mess) {
-        System.out.println("writing");
         if(mess.matches(".*(grimg|grimg_demo|GRIMG|GRIMG_DEMO).*")){
             command = "GRIMG";
             System.out.println("getting Image");
         }
-        if(mess.matches(".*(xsize?|ysize?|xframe?|yframe?).*")){
+        if(mess.matches(".*(XSIZE\\?|YSIZE\\?|XFRAME|YFRAME|XMSEC\\?|VER\\?|XOFFS\\?|YOFFS\\?).*")){
             command = mess;
             System.out.println("getting:" + mess);
         }
@@ -129,13 +128,7 @@ public class Connector implements SerialPortEventListener{
                     byte[] stringBuff = new byte[1024];
                     dataIs.read(stringBuff);
                     String rawString = new String(stringBuff, "UTF-8");
-                    //termDisplay.appendText(rawString);
-                    rawString = rawString.trim();
-                    if(rawString.endsWith(" OK")) {
-                        //response = rawString.substring(0, rawString.length() - 3);
-                    } else {
-                        //response = rawString;
-                    }
+                    termDisplay.appendText(rawString);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -183,36 +176,51 @@ public class Connector implements SerialPortEventListener{
                 try {
                     byte[] stringBuff = new byte[32];
                     dataIs.read(stringBuff);
-                    //String rawString = new String(stringBuff, "UTF-8");
-                    //rawString = rawString.trim();
-                    /*if(rawString.endsWith(" OK")) {
+                    String rawString = new String(stringBuff, "UTF-8");
+                    rawString = rawString.trim();
+                    if(rawString.endsWith(" OK")) {
                         response = rawString.substring(0, rawString.length() - 3);
                     } else {
                         response = rawString;
-                    }*/
+                    }
 
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
                 switch(command){
-                    case "xsize?":
+                    case "XSIZE?":
                         SWCanvas.xsize = Integer.parseInt(response);
                         break;
 
-                    case "ysize?":
+                    case "YSIZE?":
                         SWCanvas.ysize = Integer.parseInt(response);
                         break;
 
-                    case "xframe?":
+                    case "XFRAME":
                         SWCanvas.xframe = Integer.parseInt(response);
                         break;
 
-                    case "yframe?":
+                    case "YFRAME":
                         SWCanvas.yframe = Integer.parseInt(response);
+                        break;
+                    case "XMSEC?":
+                        SWCanvas.xmsec = Integer.parseInt(response);
+                        break;
+
+                    case "VER?":
+                        SWCanvas.vers = response;
+                        break;
+
+                    case "XOFFS?":
+                        SWCanvas.xoffset = Integer.parseInt(response);
+                        break;
+
+                    case "YOFFS?":
+                        SWCanvas.yoffset = Integer.parseInt(response);
                         break;
 
                 }
-                //System.out.print(response);
+                System.out.println(response);
                 command = "none";
             }
         }

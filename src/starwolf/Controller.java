@@ -42,6 +42,16 @@ public class Controller {
     private Slider slider;
     @FXML
     private HistogramCanvas histogram;
+    @FXML
+    private TextField tfXSIZE;
+    @FXML
+    private TextField tfXMSEC;
+    @FXML
+    private TextField tfXFRAME;
+    @FXML
+    private TextField tfYFRAME;
+    @FXML
+    private TextField tfYSIZE;
 
     @FXML
     protected void initialize() {
@@ -89,8 +99,75 @@ public class Controller {
 
     @FXML
     protected void grabMeta() {
-        Connector.command = "xsize?";
-        serialLink.write("xsize?");
+        serialLink.write("XSIZE?");
+        try {
+            // thread to sleep for 1000 milliseconds
+            Thread.sleep(500);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        tfXSIZE.setText(String.valueOf(canvas.xsize));
+        serialLink.write("YSIZE?");
+        try {
+            // thread to sleep for 1000 milliseconds
+            Thread.sleep(500);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        tfYSIZE.setText(String.valueOf(canvas.ysize));
+        serialLink.write("XFRAME");
+        try {
+            // thread to sleep for 1000 milliseconds
+            Thread.sleep(500);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        tfXFRAME.setText(String.valueOf(canvas.xframe));
+        serialLink.write("YFRAME");
+        try {
+            // thread to sleep for 1000 milliseconds
+            Thread.sleep(500);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        tfYFRAME.setText(String.valueOf(canvas.yframe));
+        serialLink.write("XMSEC?");
+        try {
+            // thread to sleep for 1000 milliseconds
+            Thread.sleep(500);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        tfXMSEC.setText(String.valueOf(canvas.xmsec));
+    }
+    @FXML
+    protected void grImg() {
+        serialLink.write("GRIMG");
+    }
+    @FXML
+    protected void upXSIZE() {
+        canvas.xsize = Integer.valueOf(tfXSIZE.getText());
+        serialLink.write("XSIZE " + tfXSIZE.getText());
+    }
+    @FXML
+    protected void upYSIZE() {
+        canvas.ysize = Integer.valueOf(tfYSIZE.getText());
+        serialLink.write("YSIZE " + tfXSIZE.getText());
+    }
+    @FXML
+    protected void upXFRAME() {
+        canvas.xframe = Integer.valueOf(tfXFRAME.getText());
+        serialLink.write("XFRAME " + tfXFRAME.getText());
+    }
+    @FXML
+    protected void upYFRAME() {
+        canvas.yframe = Integer.valueOf(tfYFRAME.getText());
+        serialLink.write("YFRAME " + tfYFRAME.getText());
+    }
+    @FXML
+    protected void upXMSEC() {
+        canvas.xmsec = Integer.valueOf(tfXMSEC.getText());
+        serialLink.write("XMSEC " + tfXMSEC.getText());
     }
 
     @FXML
@@ -213,17 +290,6 @@ public class Controller {
         serialLink = new Connector();
         serialLink.initialize(termOut);
         serialLink.setCurrentCanvas(canvas);
-        Thread t = new Thread() {
-            public void run() {
-                //the following line will keep this app alive for 1000 seconds,
-                //waiting for events to occur and responding to them (printing incoming messages to console).
-                try {
-                    Thread.sleep(1000000);
-                } catch (InterruptedException ie) {
-                }
-            }
-        };
-        t.start();
     }
 
     @FXML

@@ -59,58 +59,54 @@
                                 <VBox>
                                     <Label text="x-size"/>
                                     <HBox>
-                                        <TextField/>
-                                        <Button text="↺"/>
+                                        <TextField fx:id="tfXSIZE"/>
+                                        <Button text="↺" onAction="#upXSIZE"/>
                                     </HBox>
                                     <Label text="y-size"/>
                                     <HBox>
-                                        <TextField/>
-                                        <Button text="↺"/>
+                                        <TextField fx:id="tfYSIZE" />
+                                        <Button text="↺" onAction="#upYSIZE"/>
                                     </HBox>
                                 </VBox>
-                                <VBox>
+                                <!--<VBox>
                                     <Label text="x-offset"/>
                                     <HBox>
-                                        <TextField/>
+                                        <TextField fx:id="tfXOFFS" />
                                         <Button text="↺"/>
                                     </HBox>
                                     <Label text="y-offset"/>
                                     <HBox>
-                                        <TextField/>
+                                        <TextField fx:id="tfYOFFS" />
                                         <Button text="↺"/>
                                     </HBox>
                                 </VBox>
+                                -->
                             </HBox>
                             <HBox>
                                 <VBox>
-                                    <Label text="x-bin"/>
+                                    <Label text="xframe"/>
                                     <HBox>
-                                        <TextField/>
-                                        <Button text="↺"/>
+                                        <TextField fx:id="tfXFRAME"/>
+                                        <Button text="↺"  onAction="#upXFRAME" />
                                     </HBox>
                                     <Label text="xmsec"/>
                                     <HBox>
-                                        <TextField/>
-                                        <Button text="↺"/>
+                                        <TextField fx:id="tfXMSEC" />
+                                        <Button text="↺" onAction="#upXMSEC"/>
                                     </HBox>
                                 </VBox>
                                 <VBox>
-                                    <Label text="y-bin"/>
+                                    <Label text="yframe"/>
                                     <HBox>
-                                        <TextField/>
-                                        <Button text="↺"/>
+                                        <TextField fx:id="tfYFRAME" />
+                                        <Button text="↺" onAction="#upYFRAME"/>
                                     </HBox>
                                 </VBox>
                             </HBox>
                             <HBox>
                                 <VBox>
-                                    <Button text="Capture"/>
                                     <Button text="Redraw" onAction="#reDraw"/>
-                                    <Button text="Expose"/>
-                                </VBox>
-                                <VBox>
-                                    <Button text="Flush"/>
-                                    <Button text="Power Off"/>
+                                    <Button text="Grab Image" onAction="#grImg"/>
                                 </VBox>
                             </HBox>
                         </VBox>
@@ -135,7 +131,7 @@
                             </HBox>
                             <VBox>
                                 <Button text="FHT"/>
-                                <Slider fx:id="slider" min="0" max="2" value="1" majorTickUnit="0.01"/>
+                                <Slider fx:id="slider" min="-3" max="6" value="1" majorTickUnit="0.01"/>
                             </VBox>
                         </VBox>
                     </TitledPane>

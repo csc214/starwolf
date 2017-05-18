@@ -88,7 +88,7 @@ public class SWCanvas extends Canvas {
     }
 
     protected Color shortToColor(short value) {
-        int newValue = (int) ((double) (value - minGray) / (double) (maxGray - minGray) * 255);
+        int newValue = (int) ((double) (value - minGray) / (double) (maxGray - minGray) * 255.0);
         return Color.grayRgb(newValue);
     }
 
@@ -101,7 +101,6 @@ public class SWCanvas extends Canvas {
         for (int y = 0; y < ysize; ++y)
             for (int x = 0; x < xsize; ++x)
                 this.getGraphicsContext2D().getPixelWriter().setColor(x, y, shortToColor(workingBuffer[x][y]));
-        System.out.println(Arrays.deepToString(workingBuffer));
     }
 
     public void setXYSize(int xs, int ys) {
@@ -144,7 +143,7 @@ public class SWCanvas extends Canvas {
         minGray = Short.MAX_VALUE;
         for (int i = 0; i < ysize; ++i) {
             for (int j = 0; j < xsize; ++j) {
-                workingBuffer[j][i] = (short) (pixelReader.getColor(j, i).getBrightness() * 255);
+                workingBuffer[j][i] = (short) (pixelReader.getColor(j, i).getBrightness() * 255.0);
                 if (minGray > workingBuffer[j][i])
                     minGray = workingBuffer[j][i];
                 if (maxGray < workingBuffer[j][i])
@@ -168,7 +167,7 @@ public class SWCanvas extends Canvas {
         short[][] tmp = new short[xsize][ysize];
         for (int j = 0; j < ysize; ++j) {
             for (int i = 0; i < xsize; ++i) {
-                tmp[i][j] = (short) (c * Math.log(originBuffer[i][j] + 1));
+                tmp[i][j] = (short) (c * Math.log((originBuffer[i][j] + 1)));
             }
         }
         fillBuffer(tmp);
