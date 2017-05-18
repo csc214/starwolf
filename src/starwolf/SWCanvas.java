@@ -12,6 +12,7 @@ import javafx.scene.image.Image;
 public class SWCanvas extends Canvas {
     private short originBuffer[][] = null; // untouched data from the camera
     private short workingBuffer[][];   // one of two swappable buffers actions are performed on
+    private short drawingBuffer[][];   // one of two swappable buffers actions are performed on
     public static int xsize = 780;  // region of interest width
     public static int ysize = 489;  // region of interest height
     public static int xframe;   // full frame width
@@ -35,7 +36,7 @@ public class SWCanvas extends Canvas {
 
     public void fillBuffer(Object buffer) {
         workingBuffer = new short[xsize][ysize];
-        if(firstpass)
+        if (firstpass)
             originBuffer = new short[xsize][ysize];
         maxGray = Short.MIN_VALUE;
         minGray = Short.MAX_VALUE;
@@ -44,8 +45,8 @@ public class SWCanvas extends Canvas {
             for (int y = 0; y < ysize; ++y) {
                 for (int x = 0; x < xsize; ++x) {
                     workingBuffer[x][y] = (short) (pixelReader.getColor(x, y).getBrightness() * 255);
-                    if(firstpass)
-                    originBuffer[x][y] = (short) (pixelReader.getColor(x, y).getBrightness() * 255);
+                    if (firstpass)
+                        originBuffer[x][y] = (short) (pixelReader.getColor(x, y).getBrightness() * 255);
                     if (minGray > workingBuffer[x][y])
                         minGray = workingBuffer[x][y];
                     if (maxGray < workingBuffer[x][y])
@@ -58,8 +59,8 @@ public class SWCanvas extends Canvas {
             for (int y = 0; y < ysize; ++y) {
                 for (int x = 0; x < xsize; x++) {
                     workingBuffer[x][y] = tmpBuffer[x][y];
-                    if(firstpass)
-                    originBuffer[x][y] = tmpBuffer[x][y];
+                    if (firstpass)
+                        originBuffer[x][y] = tmpBuffer[x][y];
                     if (minGray > workingBuffer[x][y])
                         minGray = workingBuffer[x][y];
                     if (maxGray < workingBuffer[x][y])
@@ -69,6 +70,17 @@ public class SWCanvas extends Canvas {
             firstpass = false;
             draw();
         }
+    }
+
+    short[] getBufferOneD(){
+        short[] tmp = new short[xsize * ysize];
+        for(int j = 0; j < ysize; ++j){
+            for(int i = 0; i < xsize; ++i){
+                tmp[j * xsize + i] = workingBuffer[i][j];
+            }
+        }
+
+        return tmp;
     }
 
     protected Color shortToColor(short value) {

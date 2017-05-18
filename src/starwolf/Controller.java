@@ -40,6 +40,8 @@ public class Controller {
     private ComboBox portBox;
     @FXML
     private Slider slider;
+    @FXML
+    private HistogramCanvas histogram;
 
     @FXML
     protected void initialize() {
@@ -92,7 +94,6 @@ public class Controller {
         Connector.command = "xsize?";
         serialLink.write("xsize?");
     }
-
 
     @FXML
     protected void menuActionFileOpen(ActionEvent event) {
@@ -225,5 +226,10 @@ public class Controller {
             }
         };
         t.start();
+    }
+
+    @FXML
+    private void renderHistogram(ActionEvent event){
+        histogram.render(canvas.getBufferOneD());
     }
 }

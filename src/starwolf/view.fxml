@@ -4,6 +4,7 @@
 <?import javafx.scene.layout.*?>
 <?import starwolf.SWCanvas?>
 <?import javafx.collections.FXCollections?>
+<?import starwolf.HistogramCanvas?>
 <VBox fx:id="root" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.102"
       fx:controller="starwolf.Controller">
     <MenuBar fx:id="menuBar">
@@ -136,6 +137,12 @@
                                 <Button text="FHT"/>
                                 <Slider fx:id="slider" min="0" max="2" value="1" majorTickUnit="0.01"/>
                             </VBox>
+                        </VBox>
+                    </TitledPane>
+                    <TitledPane text="Histogram">
+                        <VBox>
+                            <HistogramCanvas fx:id="histogram"/>
+                            <Button text="Render" onAction="#renderHistogram"/>
                         </VBox>
                     </TitledPane>
                     <TitledPane text="Terminal">
