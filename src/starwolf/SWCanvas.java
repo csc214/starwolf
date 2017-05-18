@@ -12,8 +12,9 @@ import java.util.Arrays;
  * Created by oeathus on 4/27/17.
  */
 public class SWCanvas extends Canvas {
-    private short originBuffer[][]; // untouched data from the camera
+    private short originBuffer[][] = null; // untouched data from the camera
     private short workingBuffer[][];   // one of two swappable buffers actions are performed on
+    private short drawingBuffer[][];   // one of two swappable buffers actions are performed on
     public static int xsize = 780;  // region of interest width
     public static int ysize = 495;  // region of interest height
     public static int xframe;   // full frame width
@@ -29,6 +30,7 @@ public class SWCanvas extends Canvas {
     public static int temp; // the temperature of the camera at time of capture
     public static int xmsec; // time in milliseconds
     public static String vers; // version of the camera firmware
+    public static boolean firstpass = true;
 
     public SWCanvas() {
         super();
@@ -38,13 +40,17 @@ public class SWCanvas extends Canvas {
 
     public void fillBuffer(Object buffer) {
         workingBuffer = new short[xsize][ysize];
+        if (firstpass)
+            originBuffer = new short[xsize][ysize];
         maxGray = Short.MIN_VALUE;
         minGray = Short.MAX_VALUE;
         if (buffer instanceof PixelReader) {
             PixelReader pixelReader = (PixelReader) buffer;
             for (int y = 0; y < ysize; ++y) {
-                for (int x = 0; x < xsize; ++x){
+                for (int x = 0; x < xsize; ++x) {
                     workingBuffer[x][y] = (short) (pixelReader.getColor(x, y).getBrightness() * 255);
+                    if (firstpass)
+                        originBuffer[x][y] = (short) (pixelReader.getColor(x, y).getBrightness() * 255);
                     if (minGray > workingBuffer[x][y])
                         minGray = workingBuffer[x][y];
                     if (maxGray < workingBuffer[x][y])
@@ -57,26 +63,39 @@ public class SWCanvas extends Canvas {
             for (int y = 0; y < ysize; ++y) {
                 for (int x = 0; x < xsize; x++) {
                     workingBuffer[x][y] = tmpBuffer[x][y];
+                    if (firstpass)
+                        originBuffer[x][y] = tmpBuffer[x][y];
                     if (minGray > workingBuffer[x][y])
                         minGray = workingBuffer[x][y];
                     if (maxGray < workingBuffer[x][y])
                         maxGray = workingBuffer[x][y];
                 }
             }
+            firstpass = false;
             draw();
         }
-
     }
 
-    protected Color shortToColor(short value){
-        int newValue = (int) ((double)(value - minGray)/(double)(maxGray - minGray) * 255);
+    short[] getBufferOneD(){
+        short[] tmp = new short[xsize * ysize];
+        for(int j = 0; j < ysize; ++j){
+            for(int i = 0; i < xsize; ++i){
+                tmp[j * xsize + i] = workingBuffer[i][j];
+            }
+        }
+
+        return tmp;
+    }
+
+    protected Color shortToColor(short value) {
+        int newValue = (int) ((double) (value - minGray) / (double) (maxGray - minGray) * 255);
         return Color.grayRgb(newValue);
     }
 
     public void draw() {
-        if((int) getWidth() != xsize)
+        if ((int) getWidth() != xsize)
             setWidth(xsize);
-        if((int) getHeight() != ysize)
+        if ((int) getHeight() != ysize)
             setHeight(ysize);
         this.getGraphicsContext2D().clearRect(0, 0, xsize, ysize);
         for (int y = 0; y < ysize; ++y)
@@ -133,5 +152,25 @@ public class SWCanvas extends Canvas {
             }
         }
         draw();
+    }
+
+    protected void invert() {
+        short[][] tmp = new short[xsize][ysize];
+        for (int j = 0; j < ysize; ++j) {
+            for (int i = 0; i < xsize; ++i) {
+                tmp[i][j] = (short) (maxGray - workingBuffer[i][j]);
+            }
+        }
+        fillBuffer(tmp);
+    }
+
+    protected void logTransform(double c) {
+        short[][] tmp = new short[xsize][ysize];
+        for (int j = 0; j < ysize; ++j) {
+            for (int i = 0; i < xsize; ++i) {
+                tmp[i][j] = (short) (c * Math.log(originBuffer[i][j] + 1));
+            }
+        }
+        fillBuffer(tmp);
     }
 }

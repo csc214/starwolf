@@ -1,13 +1,12 @@
 package starwolf;
 
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -17,6 +16,7 @@ import nom.tam.fits.Fits;
 import nom.tam.fits.FitsException;
 import nom.tam.fits.ImageData;
 import nom.tam.fits.ImageHDU;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -38,6 +38,10 @@ public class Controller {
     private Label statusLeft;
     @FXML
     private ComboBox portBox;
+    @FXML
+    private Slider slider;
+    @FXML
+    private HistogramCanvas histogram;
 
     @FXML
     protected void initialize() {
@@ -59,6 +63,12 @@ public class Controller {
 
         statusLeft.setText("Initialized - OK");
         updatePortList();
+        slider.valueProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+                canvas.logTransform(t1.doubleValue());
+            }
+        });
     }
 
     @FXML
@@ -82,7 +92,6 @@ public class Controller {
         Connector.command = "xsize?";
         serialLink.write("xsize?");
     }
-
 
     @FXML
     protected void menuActionFileOpen(ActionEvent event) {
@@ -140,6 +149,32 @@ public class Controller {
     }
 
     @FXML
+    protected void menuActionImageCheckerboard(ActionEvent event) {
+        int isquares = 8,
+                jsquares = 8,
+                squarewidth = 20,
+                squareheight = 20;
+        short black = 0,
+                white = 255;
+        boolean dark = false;
+        short[][] tmp = new short[isquares * squarewidth][jsquares * squareheight];
+        for (short j = 0; j < jsquares; ++j) {
+            dark = !dark;
+            for (short i = 0; i < isquares; ++i) {
+                dark = !dark;
+                for (short y = 0; y < squareheight; ++y) {
+                    for (short x = 0; x < squarewidth; ++x) {
+                        if (dark) tmp[squarewidth * i + x][squareheight * j + y] = white;
+                        else tmp[squarewidth * i + x][squareheight * j + y] = black;
+                    }
+                }
+            }
+        }
+        canvas.setXYSize(isquares * squarewidth, jsquares * squareheight);
+        canvas.fillBuffer(tmp);
+    }
+
+    @FXML
     protected void menuActionImageDeInterlace(ActionEvent event) {
         canvas.deinterlace();
     }
@@ -147,6 +182,22 @@ public class Controller {
     @FXML
     protected void menuActionImageFHT(ActionEvent event) {
         canvas.fasthartley();
+    }
+
+    @FXML
+    protected void menuActionImageInvert(ActionEvent event) {
+        canvas.invert();
+    }
+
+    @FXML
+    protected void menuActionImageLogTransform(ActionEvent event) {
+        canvas.logTransform(0.25);
+    }
+
+    @FXML
+    protected void sliderAction(ActionEvent event) {
+        System.out.println(slider.getValue());
+        canvas.logTransform(slider.getValue());
     }
 
     @FXML
@@ -158,7 +209,6 @@ public class Controller {
     }
 
     @FXML
-
     private void initSerialLink() {
         serialLink = new Connector();
         serialLink.initialize(termOut);
@@ -174,5 +224,10 @@ public class Controller {
             }
         };
         t.start();
+    }
+
+    @FXML
+    private void renderHistogram(ActionEvent event){
+        histogram.render(canvas.getBufferOneD());
     }
 }

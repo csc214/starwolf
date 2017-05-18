@@ -4,6 +4,7 @@
 <?import javafx.scene.layout.*?>
 <?import starwolf.SWCanvas?>
 <?import javafx.collections.FXCollections?>
+<?import starwolf.HistogramCanvas?>
 <VBox fx:id="root" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.102"
       fx:controller="starwolf.Controller">
     <MenuBar fx:id="menuBar">
@@ -18,6 +19,12 @@
         <Menu mnemonicParsing="false" text="Edit">
         </Menu>
         <Menu mnemonicParsing="false" text="View">
+        </Menu>
+        <Menu mnemonicParsing="false" text="Image">
+            <MenuItem mnemonicParsing="false" onAction="#menuActionImageCheckerboard" text="Checkerboard Fill"/>
+            <SeparatorMenuItem/>
+            <MenuItem mnemonicParsing="false" onAction="#menuActionImageInvert" text="Invert"/>
+            <MenuItem mnemonicParsing="false" onAction="#menuActionImageLogTransform" text="Log Transform"/>
         </Menu>
         <Menu mnemonicParsing="false" text="Process">
             <MenuItem mnemonicParsing="false" onAction="#menuActionImageDeInterlace" text="DeInterlace"/>
@@ -40,7 +47,7 @@
                                         </FXCollections>
                                     </items>
                                 </ComboBox>
-                                <Button text="Refresh" onAction="#updatePortList" />
+                                <Button text="Refresh" onAction="#updatePortList"/>
                             </HBox>
                             <HBox>
                                 <VBox>
@@ -52,21 +59,25 @@
                                 <VBox>
                                     <Label text="x-size"/>
                                     <HBox>
-                                        <TextField/><Button text="↺"/>
+                                        <TextField/>
+                                        <Button text="↺"/>
                                     </HBox>
                                     <Label text="y-size"/>
                                     <HBox>
-                                        <TextField/><Button text="↺"/>
+                                        <TextField/>
+                                        <Button text="↺"/>
                                     </HBox>
                                 </VBox>
                                 <VBox>
                                     <Label text="x-offset"/>
                                     <HBox>
-                                        <TextField/><Button text="↺"/>
+                                        <TextField/>
+                                        <Button text="↺"/>
                                     </HBox>
                                     <Label text="y-offset"/>
                                     <HBox>
-                                        <TextField/><Button text="↺"/>
+                                        <TextField/>
+                                        <Button text="↺"/>
                                     </HBox>
                                 </VBox>
                             </HBox>
@@ -74,24 +85,27 @@
                                 <VBox>
                                     <Label text="x-bin"/>
                                     <HBox>
-                                        <TextField/><Button text="↺"/>
+                                        <TextField/>
+                                        <Button text="↺"/>
                                     </HBox>
                                     <Label text="xmsec"/>
                                     <HBox>
-                                        <TextField/><Button text="↺"/>
+                                        <TextField/>
+                                        <Button text="↺"/>
                                     </HBox>
                                 </VBox>
                                 <VBox>
                                     <Label text="y-bin"/>
                                     <HBox>
-                                        <TextField/><Button text="↺"/>
+                                        <TextField/>
+                                        <Button text="↺"/>
                                     </HBox>
                                 </VBox>
                             </HBox>
                             <HBox>
                                 <VBox>
                                     <Button text="Capture"/>
-                                    <Button text="Redraw" onAction="#reDraw" />
+                                    <Button text="Redraw" onAction="#reDraw"/>
                                     <Button text="Expose"/>
                                 </VBox>
                                 <VBox>
@@ -107,17 +121,28 @@
                                 <VBox>
                                     <Label text="minimum brightness"/>
                                     <HBox>
-                                        <TextField/><Button text="set" textOverrun="CLIP"/>
+                                        <TextField/>
+                                        <Button text="set" textOverrun="CLIP"/>
                                     </HBox>
                                 </VBox>
                                 <VBox>
                                     <Label text="maximum brightness"/>
                                     <HBox>
-                                        <TextField/><Button text="set" textOverrun="CLIP"/>
+                                        <TextField/>
+                                        <Button text="set" textOverrun="CLIP"/>
                                     </HBox>
                                 </VBox>
                             </HBox>
-                            <Button text="FHT"/>
+                            <VBox>
+                                <Button text="FHT"/>
+                                <Slider fx:id="slider" min="0" max="2" value="1" majorTickUnit="0.01"/>
+                            </VBox>
+                        </VBox>
+                    </TitledPane>
+                    <TitledPane text="Histogram">
+                        <VBox>
+                            <HistogramCanvas fx:id="histogram"/>
+                            <Button text="Render" onAction="#renderHistogram"/>
                         </VBox>
                     </TitledPane>
                     <TitledPane text="Terminal">
